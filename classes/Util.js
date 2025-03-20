@@ -1,6 +1,6 @@
 class Utils {
 
-    dateForma(date){
-    return Date.gerDate()+'/'+(Date.getMonth()+1)+Date.getFullYear()+' '+Date.getHour()+':'+Date.getMinute();
+    static dateFormat(date){
+    return date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes();
 }
 }
