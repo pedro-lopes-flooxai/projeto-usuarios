@@ -14,6 +14,10 @@ class User {
 
     }
 
+    get register() {
+        return this._register;
+    }
+
     get name() {
         return this._name;
     }
@@ -46,4 +50,7 @@ class User {
         return this._email;
     }
     
+    set photo(value){
+        this._photo = value;
+    }
 }
