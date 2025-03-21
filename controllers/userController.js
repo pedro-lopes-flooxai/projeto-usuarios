@@ -4,8 +4,19 @@ class UserController {
 
         this.formEl = document.getElementById(formId);
         this.tableEl = document.getElementById(tableId);
+        this.onSubmit();
+        this.onEdit();
+       
 
-        this.onSubmit()
+    }
+
+    onEdit(){
+
+    document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e=>{
+
+        this.showPanelCreate();
+
+    });
 
     }
 
@@ -125,7 +136,7 @@ class UserController {
             user.email, 
             user.password, 
             user.photo, 
-            user.admin,
+            user.admin
         );
 
     }
@@ -138,24 +149,39 @@ class UserController {
         tr.dataset.user = JSON.stringify(dataUser);
 
         tr.innerHTML = `
-            <tr>
                 <td><img src=${dataUser.photo} class="img-circle img-sm"></td>
                 <td>${dataUser.name}</td>
                 <td>${dataUser.email}</td>
                 <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
-                <td>${dataUser.register}</td>
+                <td>${Utils.dateFormat(dataUser.register)}</td>
                 <td>
-                    <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
+                    <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
                     <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
                 </td>
-            </tr>
         `;
+
+            tr.querySelector(".btn-edit").addEventListener("click", e=>{
+                   
+                console.log(JSON.parse(tr.dataset.user));
+                    
+                this.showPanelUpdate();
+            });
 
             this.tableEl.appendChild(tr);
 
         this.updateCount();
 
     }
+        
+            showPanelCreate(){
+                document.querySelector("#box-user-create").style.display = "block";
+                document.querySelector("#box-user-update").style.display ="none";
+        }
+            showPanelUpdate(){
+                document.querySelector("#box-user-create").style.display = "none";
+                document.querySelector("#box-user-update").style.display ="block";
+        }
+
         updateCount(){
 
             let numberUsers = 0;
@@ -167,7 +193,7 @@ class UserController {
 
                let user = (JSON.parse(tr.dataset.user));
 
-               if (user.admin) numberAdmin++;
+               if (user._admin) numberAdmin++;
 
             });
 
