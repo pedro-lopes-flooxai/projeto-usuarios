@@ -47,7 +47,7 @@ class User {
     }
     
     get admin() {
-        return this._email;
+        return this._admin;
     }
     
     set photo(value){
