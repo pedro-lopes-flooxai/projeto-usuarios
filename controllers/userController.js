@@ -5,6 +5,7 @@ class UserController {
         this.formEl = document.getElementById(formIdCreate);
         this.formUpdateEl = document.getElementById(formIdUpdate);
         this.tableEl = document.getElementById(tableId);
+
         this.onSubmit();
         this.onEdit();
         this.selectAll();
