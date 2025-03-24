@@ -111,3 +111,5 @@ class User {
         localStorage.setItem("users", JSON.stringify(users));
     }
 }
+
+//end
