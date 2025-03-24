@@ -1,7 +1,7 @@
 class UserController {
 
     constructor (formIdCreate, formIdUpdate, tableId){
-        
+
         this.formEl = document.getElementById(formIdCreate);
         this.formUpdateEl = document.getElementById(formIdUpdate);
         this.tableEl = document.getElementById(tableId);
@@ -51,6 +51,8 @@ class UserController {
 
                     user.loadFromJSON(result);
 
+                    user.save();
+
                     this.getTr(user, tr);
 
                     this.updateCount();
@@ -90,7 +92,7 @@ class UserController {
 
                     values.photo = content;
 
-                    this.insert(values);
+                    values.save();
 
                     this.addLine(values);
 
@@ -117,7 +119,9 @@ class UserController {
             let elements = [...formEl.elements].filter(item => {
 
                 if (item.name === 'photo') {
+
                     return item;
+
                 }
 
             });
@@ -137,9 +141,13 @@ class UserController {
             };
 
             if(file) {
+
                 fileReader.readAsDataURL(file);
+
             } else {
+
                 resolve('dist/img/boxed-bg.jpg');
+
             }
 
         });
@@ -179,10 +187,13 @@ class UserController {
         });
 
         if (!isValid) {
+
             return false;
+
         }
     
         return new User(
+
             user.name, 
             user.gender, 
             user.birth, 
@@ -191,27 +202,16 @@ class UserController {
             user.password, 
             user.photo, 
             user.admin
+
         );
 
     }
 
-    getusersStorage () {
-
-        let users = [];
-
-        if (localStorage.getItem("users")) {
-
-            users = JSON.parse(localStorage.getItem("users"));
-
-        }
-
-        return users
-
-    }
+ 
 
     selectAll() {
        
-        let users = this.getusersStorage();
+        let users = User.getusersStorage();
         
         users.forEach(dataUser => {
 
@@ -221,21 +221,11 @@ class UserController {
         
             this.addLine(user);
 
-        })
-
-    }
-
-    insert(data) {
-
-        let users = this.getusersStorage();
-
-        users.push(data);
-
-        // sessionStorage.setItem("users", JSON.stringify(users));
-        localStorage.setItem("users", JSON.stringify(users));
+        });
 
     }
     
+
     addLine(dataUser) {
 
         let tr = this.getTr(dataUser);
@@ -253,6 +243,7 @@ class UserController {
         tr.dataset.user = JSON.stringify(dataUser);
 
         tr.innerHTML = `
+
             <td><img src=${dataUser.photo} class="img-circle img-sm"></td>
             <td>${dataUser.name}</td>
             <td>${dataUser.email}</td>
@@ -262,6 +253,7 @@ class UserController {
                 <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-delete btn-xs btn-flat">Excluir</button>
             </td>
+
         `;
 
         this.addEventsTr(tr);
@@ -276,6 +268,12 @@ class UserController {
 
             if(confirm("Deseja relamente excluir?")) {
 
+                let user = new User();
+
+                user.loadFromJSON(JSON.parse(tr.dataset.user))
+
+                user.remove();
+
                 tr.remove();
 
                 this.updateCount();
@@ -287,6 +285,7 @@ class UserController {
         tr.querySelector(".btn-edit").addEventListener("click", e => {
 
             let json = JSON.parse(tr.dataset.user);
+
 
             this.formUpdateEl.dataset.trIndex = tr.sectionRowIndex;
 
@@ -301,7 +300,6 @@ class UserController {
                             continue;
                             break;
                             
-
                         case 'radio':
                             field = this.formUpdateEl.querySelector("[name=" + name.replace("_", "") + "][value=" + json[name] + "]");
                             field.checked = true;
@@ -313,11 +311,11 @@ class UserController {
 
                         default:
                             field.value = json[name];
-
                     }
 
                     field.value = json[name];
                 }
+
 
             }
 
